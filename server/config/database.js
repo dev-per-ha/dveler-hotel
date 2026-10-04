@@ -1,6 +1,7 @@
 const mysql = require("mysql2/promise");
 const fs = require("fs");
 const path = require("path");
+
 require("dotenv").config();
 
 // ========================================
@@ -8,15 +9,15 @@ require("dotenv").config();
 // ========================================
 
 const poolConfig = {
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+host: process.env.DB_HOST,
+port: Number(process.env.DB_PORT),
+user: process.env.DB_USER,
+password: process.env.DB_PASSWORD,
+database: process.env.DB_NAME,
 
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
+waitForConnections: true,
+connectionLimit: 10,
+queueLimit: 0,
 };
 
 // ========================================
@@ -24,12 +25,14 @@ const poolConfig = {
 // ========================================
 
 if (process.env.DB_SSL === "true") {
-  const caPath = path.join(__dirname, "..", "ca.pem");
+const caPath =
+process.env.DB_SSL_CA_PATH ||
+path.join(__dirname, "..", "ca.pem");
 
-  poolConfig.ssl = {
-    ca: fs.readFileSync(caPath),
-    rejectUnauthorized: true,
-  };
+poolConfig.ssl = {
+ca: fs.readFileSync(caPath),
+rejectUnauthorized: true,
+};
 }
 
 // ========================================
@@ -43,20 +46,29 @@ const pool = mysql.createPool(poolConfig);
 // ========================================
 
 const testDatabaseConnection = async () => {
-  try {
-    const connection = await pool.getConnection();
+try {
+const connection =
+await pool.getConnection();
 
-    console.log("MySQL database connected successfully.");
+```
+console.log(
+  "MySQL database connected successfully."
+);
 
-    connection.release();
-  } catch (error) {
-    console.error(
-      "MySQL database connection failed:",
-      error.message
-    );
+connection.release();
+```
 
-    throw error;
-  }
+} catch (error) {
+console.error(
+"MySQL database connection failed:",
+error.message
+);
+
+```
+throw error;
+```
+
+}
 };
 
 // ========================================
@@ -64,7 +76,6 @@ const testDatabaseConnection = async () => {
 // ========================================
 
 module.exports = {
-  pool,
-  testDatabaseConnection,
+pool,
+testDatabaseConnection,
 };
-
