@@ -10,39 +10,29 @@ require("dotenv").config();
 // ========================================
 
 const {
-  pool,
-  testDatabaseConnection,
+pool,
+testDatabaseConnection,
 } = require("./config/database");
 
 // ========================================
 // Routes
 // ========================================
 
-const roomRoutes = require(
-  "./routes/roomRoutes"
-);
+const roomRoutes = require("./routes/roomRoutes");
 
-const bookingRoutes = require(
-  "./routes/bookingRoutes"
-);
+const bookingRoutes = require("./routes/bookingRoutes");
 
-const adminRoutes = require(
-  "./routes/adminRoutes"
-);
+const adminRoutes = require("./routes/adminRoutes");
 
-const roomImageRoutes = require(
-  "./routes/roomImageRoutes"
-);
+const roomImageRoutes = require("./routes/roomImageRoutes");
 
 // ========================================
 // Email Service
 // ========================================
 
 const {
-  verifyEmailConnection,
-} = require(
-  "./services/emailService"
-);
+verifyEmailConnection,
+} = require("./services/emailService");
 
 // ========================================
 // App
@@ -50,62 +40,68 @@ const {
 
 const app = express();
 
-const PORT =
-  process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
+
+const HOST = "0.0.0.0";
 
 // ========================================
 // Middleware
 // ========================================
 
 app.use(
-  cors({
-    origin:
-      "http://localhost:5173",
+cors({
+origin:
+process.env.FRONTEND_URL ||
+"http://localhost:5173",
 
-    credentials: true,
-  })
+```
+credentials: true,
+```
+
+})
 );
 
 app.use(
-  express.json()
+express.json()
 );
 
 app.use(
-  cookieParser()
+cookieParser()
 );
 
 app.use(
-  "/uploads",
-  express.static(
-    path.join(__dirname, "uploads")
-  )
+"/uploads",
+express.static(
+path.join(__dirname, "uploads")
+)
 );
+
 // ========================================
 // API Routes
 // ========================================
 
 // Public room routes
 app.use(
-  "/api/rooms",
-  roomRoutes
+"/api/rooms",
+roomRoutes
 );
 
 // Public booking routes
 app.use(
-  "/api/bookings",
-  bookingRoutes
+"/api/bookings",
+bookingRoutes
 );
 
 // Admin routes
 app.use(
-  "/api/admin",
-  adminRoutes
+"/api/admin",
+adminRoutes
 );
 
 // Admin room image routes
 app.use(
-  "/api/admin/rooms",
-  roomImageRoutes
+"/api/admin/rooms",
+roomImageRoutes
 );
 
 // ========================================
@@ -113,14 +109,14 @@ app.use(
 // ========================================
 
 app.get(
-  "/",
-  (req, res) => {
-    return res.status(200).json({
-      success: true,
-      message:
-        "Hotel API is running.",
-    });
-  }
+"/",
+(req, res) => {
+return res.status(200).json({
+success: true,
+message:
+"Hotel API is running.",
+});
+}
 );
 
 // ========================================
@@ -128,13 +124,12 @@ app.get(
 // ========================================
 
 app.get(
-  "/api/test-db",
-  async (req, res) => {
-    try {
-      const [rows] =
-        await pool.query(
-          `
-            SELECT
+"/api/test-db",
+async (req, res) => {
+try {
+const [rows] =
+await pool.query(
+`             SELECT
               id,
               name,
               room_type,
@@ -146,69 +141,77 @@ app.get(
             FROM rooms
             ORDER BY id ASC
           `
-        );
+);
 
-      return res.status(200).json({
-        success: true,
-        message:
-          "MySQL database connection is working.",
-        data: rows,
-      });
-    } catch (error) {
-      console.error(
-        "Database test error:",
-        error.message
-      );
+```
+  return res.status(200).json({
+    success: true,
+    message:
+      "MySQL database connection is working.",
+    data: rows,
+  });
+} catch (error) {
+  console.error(
+    "Database test error:",
+    error.message
+  );
 
-      return res.status(500).json({
-        success: false,
-        message:
-          "MySQL database connection failed.",
-      });
-    }
-  }
+  return res.status(500).json({
+    success: false,
+    message:
+      "MySQL database connection failed.",
+  });
+}
+```
+
+}
 );
 
 // ========================================
 // Start Server
 // ========================================
 
-const startServer =
-  async () => {
-    try {
-      // ------------------------------------
-      // Test MySQL
-      // ------------------------------------
+const startServer = async () => {
+try {
+// ------------------------------------
+// Test MySQL
+// ------------------------------------
 
-      await testDatabaseConnection();
+```
+await testDatabaseConnection();
 
-      // ------------------------------------
-      // Test SMTP
-      // ------------------------------------
+// ------------------------------------
+// Test SMTP
+// ------------------------------------
 
-      await verifyEmailConnection();
+await verifyEmailConnection();
 
-      // ------------------------------------
-      // Start Express
-      // ------------------------------------
+// ------------------------------------
+// Start Express
+// ------------------------------------
 
-      app.listen(
-        PORT,
-        () => {
-          console.log(
-            `Hotel API running on port ${PORT}`
-          );
-        }
-      );
-    } catch (error) {
-      console.error(
-        "Server startup failed:",
-        error.message
-      );
+app.listen(
+  PORT,
+  HOST,
+  () => {
+    console.log(
+      `Hotel API running on ${HOST}:${PORT}`
+    );
+  }
+);
+```
 
-      process.exit(1);
-    }
-  };
+} catch (error) {
+console.error(
+"Server startup failed:",
+error.message
+);
+
+```
+process.exit(1);
+```
+
+}
+};
 
 startServer();
-
