@@ -10,8 +10,8 @@ require("dotenv").config();
 // ========================================
 
 const {
-pool,
-testDatabaseConnection,
+  pool,
+  testDatabaseConnection,
 } = require("./config/database");
 
 // ========================================
@@ -31,7 +31,7 @@ const roomImageRoutes = require("./routes/roomImageRoutes");
 // ========================================
 
 const {
-verifyEmailConnection,
+  verifyEmailConnection,
 } = require("./services/emailService");
 
 // ========================================
@@ -49,31 +49,28 @@ const HOST = "0.0.0.0";
 // ========================================
 
 app.use(
-cors({
-origin:
-process.env.FRONTEND_URL ||
-"http://localhost:5173",
+  cors({
+    origin:
+      process.env.FRONTEND_URL ||
+      "http://localhost:5173",
 
-```
-credentials: true,
-```
-
-})
+    credentials: true,
+  })
 );
 
 app.use(
-express.json()
+  express.json()
 );
 
 app.use(
-cookieParser()
+  cookieParser()
 );
 
 app.use(
-"/uploads",
-express.static(
-path.join(__dirname, "uploads")
-)
+  "/uploads",
+  express.static(
+    path.join(__dirname, "uploads")
+  )
 );
 
 // ========================================
@@ -82,26 +79,26 @@ path.join(__dirname, "uploads")
 
 // Public room routes
 app.use(
-"/api/rooms",
-roomRoutes
+  "/api/rooms",
+  roomRoutes
 );
 
 // Public booking routes
 app.use(
-"/api/bookings",
-bookingRoutes
+  "/api/bookings",
+  bookingRoutes
 );
 
 // Admin routes
 app.use(
-"/api/admin",
-adminRoutes
+  "/api/admin",
+  adminRoutes
 );
 
 // Admin room image routes
 app.use(
-"/api/admin/rooms",
-roomImageRoutes
+  "/api/admin/rooms",
+  roomImageRoutes
 );
 
 // ========================================
@@ -109,14 +106,14 @@ roomImageRoutes
 // ========================================
 
 app.get(
-"/",
-(req, res) => {
-return res.status(200).json({
-success: true,
-message:
-"Hotel API is running.",
-});
-}
+  "/",
+  (req, res) => {
+    return res.status(200).json({
+      success: true,
+      message:
+        "Hotel API is running.",
+    });
+  }
 );
 
 // ========================================
@@ -124,12 +121,13 @@ message:
 // ========================================
 
 app.get(
-"/api/test-db",
-async (req, res) => {
-try {
-const [rows] =
-await pool.query(
-`             SELECT
+  "/api/test-db",
+  async (req, res) => {
+    try {
+      const [rows] =
+        await pool.query(
+          `
+            SELECT
               id,
               name,
               room_type,
@@ -141,30 +139,27 @@ await pool.query(
             FROM rooms
             ORDER BY id ASC
           `
-);
+        );
 
-```
-  return res.status(200).json({
-    success: true,
-    message:
-      "MySQL database connection is working.",
-    data: rows,
-  });
-} catch (error) {
-  console.error(
-    "Database test error:",
-    error.message
-  );
+      return res.status(200).json({
+        success: true,
+        message:
+          "MySQL database connection is working.",
+        data: rows,
+      });
+    } catch (error) {
+      console.error(
+        "Database test error:",
+        error.message
+      );
 
-  return res.status(500).json({
-    success: false,
-    message:
-      "MySQL database connection failed.",
-  });
-}
-```
-
-}
+      return res.status(500).json({
+        success: false,
+        message:
+          "MySQL database connection failed.",
+      });
+    }
+  }
 );
 
 // ========================================
@@ -172,46 +167,40 @@ await pool.query(
 // ========================================
 
 const startServer = async () => {
-try {
-// ------------------------------------
-// Test MySQL
-// ------------------------------------
+  try {
+    // ------------------------------------
+    // Test MySQL
+    // ------------------------------------
 
-```
-await testDatabaseConnection();
+    await testDatabaseConnection();
 
-// ------------------------------------
-// Test SMTP
-// ------------------------------------
+    // ------------------------------------
+    // Test SMTP
+    // ------------------------------------
 
-await verifyEmailConnection();
+    await verifyEmailConnection();
 
-// ------------------------------------
-// Start Express
-// ------------------------------------
+    // ------------------------------------
+    // Start Express
+    // ------------------------------------
 
-app.listen(
-  PORT,
-  HOST,
-  () => {
-    console.log(
-      `Hotel API running on ${HOST}:${PORT}`
+    app.listen(
+      PORT,
+      HOST,
+      () => {
+        console.log(
+          `Hotel API running on ${HOST}:${PORT}`
+        );
+      }
     );
+  } catch (error) {
+    console.error(
+      "Server startup failed:",
+      error.message
+    );
+
+    process.exit(1);
   }
-);
-```
-
-} catch (error) {
-console.error(
-"Server startup failed:",
-error.message
-);
-
-```
-process.exit(1);
-```
-
-}
 };
 
 startServer();
