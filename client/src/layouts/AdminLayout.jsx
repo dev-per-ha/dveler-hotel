@@ -71,7 +71,7 @@ const AdminLayout = () => {
       setLoggingOut(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/admin/logout",
+        "https://dveler-hotel-backend.onrender.com/api/admin/logout",
         {
           method: "POST",
           credentials: "include",
