@@ -1,4 +1,4 @@
-```gitignore
+gitignore
 # ========================================
 # Dependencies
 # ========================================
@@ -77,4 +77,3 @@ desktop.ini
 
 server/uploads/*
 !server/uploads/.gitkeep
-```
