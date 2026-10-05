@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/bookings";
+const API_URL = "https://dveler-hotel-backend.onrender.com/api/bookings";
 
 export const createBooking = async (bookingData) => {
   const response = await fetch(API_URL, {
