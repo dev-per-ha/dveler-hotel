@@ -124,7 +124,7 @@ const RoomManagementModal = ({
 
       const availabilityResponse =
         await fetch(
-          `http://localhost:5000/api/admin/rooms/${room.id}/availability`,
+          `https://dveler-hotel-backend.onrender.com/api/admin/rooms/${room.id}/availability`,
           {
             method: "PATCH",
 
@@ -158,7 +158,7 @@ const RoomManagementModal = ({
 
       const statusResponse =
         await fetch(
-          `http://localhost:5000/api/admin/rooms/${room.id}/status`,
+          `https://dveler-hotel-backend.onrender.com/api/admin/rooms/${room.id}/status`,
           {
             method: "PATCH",
 
