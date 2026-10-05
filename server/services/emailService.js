@@ -1,47 +1,37 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
 require("dotenv").config();
 
 // ========================================
-// Email Transporter
+// Resend Email Client
 // ========================================
 
-const transporter =
-  nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-
-    port: Number(
-      process.env.SMTP_PORT
-    ),
-
-    secure:
-      process.env.SMTP_SECURE ===
-      "true",
-
-    auth: {
-      user:
-        process.env.SMTP_USER,
-
-      pass:
-        process.env.SMTP_PASSWORD,
-    },
-  });
+const resend =
+  new Resend(
+    process.env.RESEND_API_KEY
+  );
 
 // ========================================
-// Verify SMTP Connection
+// Verify Email Connection
 // ========================================
 
 const verifyEmailConnection =
   async () => {
     try {
-      await transporter.verify();
+      if (
+        !process.env.RESEND_API_KEY
+      ) {
+        throw new Error(
+          "RESEND_API_KEY is not configured."
+        );
+      }
 
       console.log(
-        "Email SMTP connection verified successfully."
+        "Resend email service configured successfully."
       );
     } catch (error) {
       console.error(
-        "Email SMTP connection failed:",
+        "Resend email service configuration failed:",
         error.message
       );
 
@@ -71,16 +61,21 @@ const sendBookingNotification =
       status,
     } = booking;
 
-    const mailOptions = {
-      from: `"Dveler Hotel Website" <${process.env.SMTP_USER}>`,
+    const result =
+      await resend.emails.send({
+        from:
+          process.env.EMAIL_FROM,
 
-      to: process.env.HOTEL_EMAIL,
+        to:
+          process.env.HOTEL_EMAIL,
 
-      replyTo: guest_email,
+        replyTo:
+          guest_email,
 
-      subject: `New Booking Request #${id} - ${room_name}`,
+        subject:
+          `New Booking Request #${id} - ${room_name}`,
 
-      text: `
+        text: `
 New Booking Request
 
 Booking ID: #${id}
@@ -109,23 +104,29 @@ ${special_request || "None"}
 This is a booking request submitted through the Dveler Hotel website.
 Please contact the guest using the email address or phone number above.
       `.trim(),
-    };
+      });
 
-    const result =
-      await transporter.sendMail(
-        mailOptions
+    if (result.error) {
+      console.error(
+        "Booking notification email failed:",
+        result.error
       );
 
+      throw new Error(
+        result.error.message ||
+          "Failed to send booking notification email."
+      );
+    }
+
     console.log(
-      `Booking notification email sent. Message ID: ${result.messageId}`
+      `Booking notification email sent. Message ID: ${result.data.id}`
     );
 
-    return result;
+    return result.data;
   };
 
 module.exports = {
-  transporter,
+  resend,
   verifyEmailConnection,
   sendBookingNotification,
 };
-
