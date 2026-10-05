@@ -13,7 +13,7 @@ const ProtectedAdminRoute = () => {
     const checkAuthentication = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/admin/test-auth",
+          "https://dveler-hotel-backend.onrender.com/api/admin/test-auth",
           {
             method: "GET",
             credentials: "include",
