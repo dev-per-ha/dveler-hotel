@@ -13,10 +13,10 @@ import {
 import { toast } from "sonner";
 
 const API_URL =
-  "http://localhost:5000/api/admin/rooms";
+  "https://dveler-hotel-backend.onrender.com/api/admin/rooms";
 
 const SERVER_URL =
-  "http://localhost:5000";
+  "https://dveler-hotel-backend.onrender.com";
 
 // ========================================
 // Get Image URL
