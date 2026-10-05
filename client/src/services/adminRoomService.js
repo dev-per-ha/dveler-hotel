@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/admin/rooms";
+const API_URL = "https://dveler-hotel-backend.onrender.com/api/admin/rooms";
 
 // Get All Admin Rooms
 export const getAdminRooms = async () => {
