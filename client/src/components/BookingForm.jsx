@@ -22,7 +22,7 @@ import { toast } from "sonner";
 // Server URL
 // ========================================
 
-const SERVER_URL = "http://localhost:5000";
+const SERVER_URL = "https://dveler-hotel-backend.onrender.com";
 
 // ========================================
 // Image URL Helper
