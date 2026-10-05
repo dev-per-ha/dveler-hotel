@@ -1,5 +1,5 @@
 const API_URL =
-  "http://localhost:5000/api/admin/rooms";
+  "https://dveler-hotel-backend.onrender.com/api/admin/rooms";
 
 // Get Room Images
 export const getRoomImages = async (roomId) => {
