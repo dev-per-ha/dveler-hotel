@@ -88,7 +88,7 @@ const AdminLogin = () => {
       // ========================================
 
       const response = await fetch(
-        "http://localhost:5000/api/admin/login",
+        "https://dveler-hotel-backend.onrender.com/api/admin/login",
         {
           method: "POST",
           headers: {
