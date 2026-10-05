@@ -363,8 +363,8 @@ const RoomFormModal = ({
       };
 
       const url = isEditing
-        ? `http://localhost:5000/api/admin/rooms/${room.id}`
-        : "http://localhost:5000/api/admin/rooms";
+        ? `https://dveler-hotel-backend.onrender.com/api/admin/rooms/${room.id}`
+        : "https://dveler-hotel-backend.onrender.com/api/admin/rooms";
 
       const method = isEditing
         ? "PUT"
