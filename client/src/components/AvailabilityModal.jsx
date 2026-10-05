@@ -121,7 +121,7 @@ const AvailabilityModal = ({
       });
 
       const response = await fetch(
-        `http://localhost:5000/api/rooms/availability?${params.toString()}`
+        `https://dveler-hotel-backend.onrender.com/api/rooms/availability?${params.toString()}`
       );
 
       const data = await response.json();
