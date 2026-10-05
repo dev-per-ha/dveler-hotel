@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/admin";
+const API_URL = "https://dveler-hotel-backend.onrender.com/api/admin";
 
 // Admin Login
 export const loginAdmin = async (credentials) => {
