@@ -12,7 +12,9 @@ import {
 
 import { getRooms } from "../services/roomService";
 
-const SERVER_URL = "https://dveler-hotel-backend.onrender.com";
+
+const SERVER_URL =
+  "https://dveler-hotel-backend.onrender.com";
 
 // ========================================
 // Get Image URL
@@ -36,6 +38,8 @@ const getImageUrl = (imageUrl) => {
 
   return `${SERVER_URL}/${imageUrl}`;
 };
+
+
 
 // ========================================
 // Rooms Section
